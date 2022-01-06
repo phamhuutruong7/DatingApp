@@ -17,9 +17,10 @@ namespace API.Services
         {
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
+
         public string CreateToken(AppUser user)
         {
-            var claims = new List<Claim>()
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
             };
@@ -29,8 +30,10 @@ namespace API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7)
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
             };
+
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
