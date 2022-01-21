@@ -1,3 +1,4 @@
+import { ListsComponent } from './lists/lists.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
@@ -43,7 +44,8 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     MemberEditComponent,
     PhotoEditorComponent,
     TextInputComponent,
-    DateInputComponent
+    DateInputComponent,
+    ListsComponent
   ],
   imports: [
     BrowserModule,
