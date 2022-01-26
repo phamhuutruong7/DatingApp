@@ -9,7 +9,7 @@ import { Pagination } from '../_models/pagination';
   styleUrls: ['./messages.component.css']
 })
 export class MessagesComponent implements OnInit {
-  messages: Message[];
+  messages: Message[] = [];
   pagination: Pagination;
   container = 'Outbox';
   pageNumber = 1;
@@ -32,8 +32,7 @@ export class MessagesComponent implements OnInit {
     {
       this.pageNumber = event.page;
       this.loadMessages();
-    }
-    
+    } 
   }
 
 }
