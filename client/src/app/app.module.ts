@@ -61,7 +61,6 @@ import { RolesModalComponent } from './modals/roles-modal/roles-modal.component'
     UserManagementComponent,
     PhotoManagementComponent,
     RolesModalComponent,
-
   ],
   imports: [
     BrowserModule,
