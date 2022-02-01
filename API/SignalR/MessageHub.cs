@@ -15,12 +15,18 @@ namespace API.SignalR
         private readonly IMessageRepository _messageRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IHubContext<PresenceHub> _presenceHub;
+        private readonly PresenceTracker _tracker;
 
-        public MessageHub(IMessageRepository messageRepository, IMapper mapper, IUserRepository userRepository)
+        public MessageHub(IMessageRepository messageRepository, IMapper mapper, 
+            IUserRepository userRepository, IHubContext<PresenceHub> presenceHub,
+            PresenceTracker tracker)
         {
             _messageRepository = messageRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _presenceHub = presenceHub;
+            _tracker = tracker;
         }
 
         public override async Task OnConnectedAsync()
@@ -72,13 +78,22 @@ namespace API.SignalR
             {
                 message.DateRead = DateTime.UtcNow;
             }
+            else
+            {
+                var connections = await _tracker.GetConnectionsForUser(recipient.UserName);
+                if(connections != null)
+                {
+                    await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", 
+                        new { username = sender.UserName, knownAs = sender.KnownAs });
+                }
+            }
 
             _messageRepository.AddMessage(message);
 
             if(await _messageRepository.SaveAllAsync())
             {
                 
-                await Clients.Group(group).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
+                await Clients.Group(groupName).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
             }
         }
 

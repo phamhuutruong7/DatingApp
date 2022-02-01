@@ -4,7 +4,7 @@ import { MessageService } from './../../_services/message.service';
 import { MembersService } from './../../_services/members.service';
 import { Component, OnInit, NO_ERRORS_SCHEMA, ViewChild, OnDestroy } from '@angular/core';
 import { Member } from 'src/app/_models/member';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { SchemaMetadata } from '@angular/compiler';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -27,8 +27,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   user: User;
 
   constructor(public presence: PresenceService, private route: ActivatedRoute, 
-    private messageService: MessageService, private accountService: AccountService) {
-      this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user)
+    private messageService: MessageService, private accountService: AccountService,
+    private router: Router) {
+      this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
      }
 
   
